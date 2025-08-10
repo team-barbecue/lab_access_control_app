@@ -23,9 +23,9 @@ const initialUsers = [
 ];
 
 const initialLogs = [
-  { userID: 'S002', userName: '佐藤花子', action: 'enter', timestamp: '2024-01-20T09:30:00Z' },
-  { userID: 'T001', userName: '田中太郎', action: 'exit', timestamp: '2024-01-20T08:45:00Z' },
-  { userID: 'Y003', userName: '山田次郎', action: 'exit', timestamp: '2024-01-20T08:30:00Z' },
+  { userID: 'S002', userName: '佐藤花子', action: 'enter', timestamp: '2024-01-20T09:30:00Z', comment: '研究のため' },
+  { userID: 'T001', userName: '田中太郎', action: 'exit', timestamp: '2024-01-20T08:45:00Z', comment: '作業完了' },
+  { userID: 'Y003', userName: '山田次郎', action: 'exit', timestamp: '2024-01-20T08:30:00Z', comment: '外出' },
 ];
 
 // データファイルの初期化
@@ -119,19 +119,19 @@ app.get('/api/users/:userID', async (req, res) => {
 app.post('/api/users/:userID/enter', async (req, res) => {
   try {
     const { userID } = req.params;
-    const { userName } = req.body;
-    
-    if (!userName) {
-      return res.status(400).json({ error: 'ユーザー名が必要です' });
-    }
+    const { userName, comment } = req.body;
     
     const users = await readDataFile(USERS_FILE);
     let user = users.find(u => u.userID === userID);
     
     if (!user) {
-      // 新規ユーザーを作成
-      user = { userID, userName, isInRoom: false, lastUpdate: null };
+      // 新規ユーザーを作成（userNameが渡されていない場合はデフォルト名を使用）
+      const defaultUserName = userName || `ユーザー${userID}`;
+      user = { userID, userName: defaultUserName, isInRoom: false, lastUpdate: null };
       users.push(user);
+    } else if (userName) {
+      // 既存ユーザーの名前を更新
+      user.userName = userName;
     }
     
     // 既に入室中の場合はエラー
@@ -153,14 +153,15 @@ app.post('/api/users/:userID/enter', async (req, res) => {
     const logs = await readDataFile(LOGS_FILE);
     logs.unshift({
       userID,
-      userName,
+      userName: user.userName,
       action: 'enter',
-      timestamp: user.lastUpdate
+      timestamp: user.lastUpdate,
+      comment: comment || null
     });
     
     await writeDataFile(LOGS_FILE, logs);
     
-    console.log(`入室記録: ${userName} (${userID})`);
+    console.log(`入室記録: ${user.userName} (${userID})`);
     
     res.json({
       success: true,
@@ -181,7 +182,7 @@ app.post('/api/users/:userID/enter', async (req, res) => {
 app.post('/api/users/:userID/exit', async (req, res) => {
   try {
     const { userID } = req.params;
-    const { userName } = req.body;
+    const { userName, comment } = req.body;
     
     const users = await readDataFile(USERS_FILE);
     const user = users.find(u => u.userID === userID);
@@ -191,6 +192,11 @@ app.post('/api/users/:userID/exit', async (req, res) => {
         success: false, 
         error: 'ユーザーが見つかりません' 
       });
+    }
+    
+    // ユーザー名が渡された場合は更新
+    if (userName) {
+      user.userName = userName;
     }
     
     // 既に退室中の場合はエラー
@@ -212,14 +218,15 @@ app.post('/api/users/:userID/exit', async (req, res) => {
     const logs = await readDataFile(LOGS_FILE);
     logs.unshift({
       userID,
-      userName,
+      userName: user.userName,
       action: 'exit',
-      timestamp: user.lastUpdate
+      timestamp: user.lastUpdate,
+      comment: comment || null
     });
     
     await writeDataFile(LOGS_FILE, logs);
     
-    console.log(`退室記録: ${userName} (${userID})`);
+    console.log(`退室記録: ${user.userName} (${userID})`);
     
     res.json({
       success: true,
