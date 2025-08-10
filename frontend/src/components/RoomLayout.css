@@ -1,0 +1,138 @@
+.room-layout {
+  flex: 2;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 1.5rem; /* パディングを縮小 */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.room-title {
+  font-size: 1.3rem; /* フォントサイズを縮小 */
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem; /* マージンを縮小 */
+  text-align: center;
+}
+
+.room-grid {
+  display: grid;
+  height: 65vh; /* 高さを縮小 */
+  gap: 1rem; /* 要素間のギャップを縮小 */
+  grid-template-columns: 1fr 1.2fr 1.2fr 1fr 45px; /* モニター幅を調整 */
+  grid-template-rows: 1fr 1fr 1fr auto;
+  grid-template-areas:
+    "left-group top-center    top-center    sofa1 monitor"
+    "left-group bottom-center bottom-center table monitor"
+    "left-group bottom-center bottom-center sofa2 monitor"
+    ".          .             .             door  monitor";
+}
+
+.desk-group-left {
+  grid-area: left-group;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1rem; /* ギャップを縮小 */
+}
+
+.desk-group-top-center {
+  grid-area: top-center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem; /* ギャップを縮小 */
+}
+
+.desk-group-bottom-center {
+  grid-area: bottom-center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem; /* ギャップを縮小 */
+}
+
+.desk, .static-item {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.static-item {
+  background-color: #ffffff;
+  border: 2px solid #6c757d;
+  border-radius: 8px; /* 角丸を調整 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem; /* フォントサイズを縮小 */
+  color: #343a40;
+  font-weight: 600;
+}
+
+.sofa-1    { grid-area: sofa1; }
+.table-1   { grid-area: table; }
+.sofa-2    { grid-area: sofa2; }
+.monitor-1 { 
+  grid-area: monitor; 
+  writing-mode: vertical-rl;
+  padding: 0.5rem 0; /* パディングを縮小 */
+}
+.door-1 { 
+  grid-area: door;
+}
+
+.desk {
+  border-radius: 12px; /* 角丸を調整 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+.desk:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+.desk.available {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+.desk.occupied {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+.desk-number {
+  font-size: 1rem; /* フォントサイズを縮小 */
+  margin-bottom: 0.3rem; /* マージンを縮小 */
+}
+.desk-user {
+  font-size: 0.75rem; /* フォントサイズを縮小 */
+  opacity: 0.9;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem; /* ギャップを縮小 */
+  margin-top: 1.5rem; /* マージンを縮小 */
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem; /* ギャップを縮小 */
+  font-size: 0.85rem; /* フォントサイズを縮小 */
+  color: #666;
+}
+.legend-color {
+  width: 18px; /* サイズを縮小 */
+  height: 18px; /* サイズを縮小 */
+  border-radius: 4px; /* 角丸を調整 */
+}
+.legend-available {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+.legend-occupied {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}

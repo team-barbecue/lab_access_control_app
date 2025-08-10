@@ -1,0 +1,44 @@
+[
+  {
+    "userID": "U001",
+    "userName": "田中さん",
+    "action": "enter",
+    "timestamp": "2025-08-10T07:47:00.621Z",
+    "comment": "入室"
+  },
+  {
+    "userID": "U002",
+    "userName": "佐藤さん",
+    "action": "enter",
+    "timestamp": "2025-08-10T05:30:00.000Z",
+    "comment": "研究のため"
+  },
+  {
+    "userID": "U005",
+    "userName": "高橋さん",
+    "action": "exit",
+    "timestamp": "2025-08-10T05:15:00.000Z",
+    "comment": "作業完了"
+  },
+  {
+    "userID": "U004",
+    "userName": "鈴木さん",
+    "action": "enter",
+    "timestamp": "2025-08-10T04:45:00.000Z",
+    "comment": "退出"
+  },
+  {
+    "userID": "U007",
+    "userName": "渡辺さん",
+    "action": "enter",
+    "timestamp": "2025-08-10T04:20:00.000Z",
+    "comment": "研究のため"
+  },
+  {
+    "userID": "U009",
+    "userName": "木村さん",
+    "action": "exit",
+    "timestamp": "2025-08-10T03:50:00.000Z",
+    "comment": "退出"
+  }
+]
