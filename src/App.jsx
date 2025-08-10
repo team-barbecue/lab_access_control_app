@@ -5,7 +5,6 @@ import Header from "./components/Header";
 import "./App.css";
 
 export default function App() {
-  // レイアウトに合わせて机の数を9個に変更
   const initialDesks = [
     { id: 1, user: "田中さん", occupied: false },
     { id: 2, user: "佐藤さん", occupied: true },
