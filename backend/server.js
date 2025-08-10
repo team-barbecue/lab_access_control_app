@@ -23,9 +23,9 @@ const initialUsers = [
 ];
 
 const initialLogs = [
-  { userID: 'S002', userName: '佐藤花子', action: 'enter', timestamp: '2024-01-20T09:30:00Z' },
-  { userID: 'T001', userName: '田中太郎', action: 'exit', timestamp: '2024-01-20T08:45:00Z' },
-  { userID: 'Y003', userName: '山田次郎', action: 'exit', timestamp: '2024-01-20T08:30:00Z' },
+  { userID: 'S002', userName: '佐藤花子', action: 'enter', timestamp: '2024-01-20T09:30:00Z', comment: '研究のため' },
+  { userID: 'T001', userName: '田中太郎', action: 'exit', timestamp: '2024-01-20T08:45:00Z', comment: '作業完了' },
+  { userID: 'Y003', userName: '山田次郎', action: 'exit', timestamp: '2024-01-20T08:30:00Z', comment: '外出' },
 ];
 
 // データファイルの初期化
@@ -119,7 +119,7 @@ app.get('/api/users/:userID', async (req, res) => {
 app.post('/api/users/:userID/enter', async (req, res) => {
   try {
     const { userID } = req.params;
-    const { userName } = req.body;
+    const { userName, comment } = req.body;
     
     if (!userName) {
       return res.status(400).json({ error: 'ユーザー名が必要です' });
@@ -155,7 +155,8 @@ app.post('/api/users/:userID/enter', async (req, res) => {
       userID,
       userName,
       action: 'enter',
-      timestamp: user.lastUpdate
+      timestamp: user.lastUpdate,
+      comment: comment || null
     });
     
     await writeDataFile(LOGS_FILE, logs);
@@ -181,7 +182,7 @@ app.post('/api/users/:userID/enter', async (req, res) => {
 app.post('/api/users/:userID/exit', async (req, res) => {
   try {
     const { userID } = req.params;
-    const { userName } = req.body;
+    const { userName, comment } = req.body;
     
     const users = await readDataFile(USERS_FILE);
     const user = users.find(u => u.userID === userID);
@@ -214,7 +215,8 @@ app.post('/api/users/:userID/exit', async (req, res) => {
       userID,
       userName,
       action: 'exit',
-      timestamp: user.lastUpdate
+      timestamp: user.lastUpdate,
+      comment: comment || null
     });
     
     await writeDataFile(LOGS_FILE, logs);
