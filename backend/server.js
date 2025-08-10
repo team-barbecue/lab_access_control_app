@@ -121,17 +121,17 @@ app.post('/api/users/:userID/enter', async (req, res) => {
     const { userID } = req.params;
     const { userName, comment } = req.body;
     
-    if (!userName) {
-      return res.status(400).json({ error: 'ユーザー名が必要です' });
-    }
-    
     const users = await readDataFile(USERS_FILE);
     let user = users.find(u => u.userID === userID);
     
     if (!user) {
-      // 新規ユーザーを作成
-      user = { userID, userName, isInRoom: false, lastUpdate: null };
+      // 新規ユーザーを作成（userNameが渡されていない場合はデフォルト名を使用）
+      const defaultUserName = userName || `ユーザー${userID}`;
+      user = { userID, userName: defaultUserName, isInRoom: false, lastUpdate: null };
       users.push(user);
+    } else if (userName) {
+      // 既存ユーザーの名前を更新
+      user.userName = userName;
     }
     
     // 既に入室中の場合はエラー
@@ -153,7 +153,7 @@ app.post('/api/users/:userID/enter', async (req, res) => {
     const logs = await readDataFile(LOGS_FILE);
     logs.unshift({
       userID,
-      userName,
+      userName: user.userName,
       action: 'enter',
       timestamp: user.lastUpdate,
       comment: comment || null
@@ -161,7 +161,7 @@ app.post('/api/users/:userID/enter', async (req, res) => {
     
     await writeDataFile(LOGS_FILE, logs);
     
-    console.log(`入室記録: ${userName} (${userID})`);
+    console.log(`入室記録: ${user.userName} (${userID})`);
     
     res.json({
       success: true,
@@ -194,6 +194,11 @@ app.post('/api/users/:userID/exit', async (req, res) => {
       });
     }
     
+    // ユーザー名が渡された場合は更新
+    if (userName) {
+      user.userName = userName;
+    }
+    
     // 既に退室中の場合はエラー
     if (!user.isInRoom) {
       return res.status(400).json({ 
@@ -213,7 +218,7 @@ app.post('/api/users/:userID/exit', async (req, res) => {
     const logs = await readDataFile(LOGS_FILE);
     logs.unshift({
       userID,
-      userName,
+      userName: user.userName,
       action: 'exit',
       timestamp: user.lastUpdate,
       comment: comment || null
@@ -221,7 +226,7 @@ app.post('/api/users/:userID/exit', async (req, res) => {
     
     await writeDataFile(LOGS_FILE, logs);
     
-    console.log(`退室記録: ${userName} (${userID})`);
+    console.log(`退室記録: ${user.userName} (${userID})`);
     
     res.json({
       success: true,
