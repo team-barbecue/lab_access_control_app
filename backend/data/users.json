@@ -3,7 +3,7 @@
     "userID": "U001",
     "userName": "田中さん",
     "isInRoom": false,
-    "lastUpdate": "2025-08-10T04:14:55.138Z"
+    "lastUpdate": "2025-08-10T07:05:33.719Z"
   },
   {
     "userID": "U002",
@@ -27,19 +27,19 @@
     "userID": "U005",
     "userName": "高橋さん",
     "isInRoom": false,
-    "lastUpdate": "2025-08-10T06:01:11.685Z"
+    "lastUpdate": "2025-08-10T07:12:54.938Z"
   },
   {
     "userID": "U006",
     "userName": "伊藤さん",
-    "isInRoom": false,
-    "lastUpdate": "2025-08-10T05:29:24.782Z"
+    "isInRoom": true,
+    "lastUpdate": "2025-08-10T07:12:57.440Z"
   },
   {
     "userID": "U007",
     "userName": "渡辺さん",
     "isInRoom": true,
-    "lastUpdate": "2025-08-10T05:40:25.872Z"
+    "lastUpdate": "2025-08-10T07:13:02.142Z"
   },
   {
     "userID": "U008",

@@ -17,16 +17,99 @@ const LOGS_FILE = path.join(DATA_DIR, 'logs.json');
 
 // 初期データ
 const initialUsers = [
-  { userID: 'T001', userName: '田中太郎', isInRoom: false, lastUpdate: null },
-  { userID: 'S002', userName: '佐藤花子', isInRoom: true, lastUpdate: '2024-01-20T09:30:00Z' },
-  { userID: 'Y003', userName: '山田次郎', isInRoom: false, lastUpdate: null },
-];
+    {
+      "userID": "U001",
+      "userName": "田中さん",
+      "isInRoom": false,
+      "lastUpdate": "2025-08-10T07:05:33.719Z"
+    },
+    {
+      "userID": "U002",
+      "userName": "佐藤さん",
+      "isInRoom": true,
+      "lastUpdate": "2025-08-10T04:12:29.484Z"
+    },
+    {
+      "userID": "U003",
+      "userName": "山田さん",
+      "isInRoom": false,
+      "lastUpdate": "2025-08-10T04:12:29.484Z"
+    },
+    {
+      "userID": "U004",
+      "userName": "鈴木さん",
+      "isInRoom": true,
+      "lastUpdate": "2025-08-10T04:14:51.065Z"
+    },
+    {
+      "userID": "U005",
+      "userName": "高橋さん",
+      "isInRoom": false,
+      "lastUpdate": "2025-08-10T07:12:54.938Z"
+    },
+    {
+      "userID": "U006",
+      "userName": "伊藤さん",
+      "isInRoom": true,
+      "lastUpdate": "2025-08-10T07:12:57.440Z"
+    },
+    {
+      "userID": "U007",
+      "userName": "渡辺さん",
+      "isInRoom": true,
+      "lastUpdate": "2025-08-10T07:13:02.142Z"
+    },
+    {
+      "userID": "U008",
+      "userName": "加藤さん",
+      "isInRoom": false,
+      "lastUpdate": "2025-08-10T05:29:25.823Z"
+    },
+    {
+      "userID": "U009",
+      "userName": "木村さん",
+      "isInRoom": false,
+      "lastUpdate": "2025-08-10T05:29:18.021Z"
+    }
+  ];
 
 const initialLogs = [
-  { userID: 'S002', userName: '佐藤花子', action: 'enter', timestamp: '2024-01-20T09:30:00Z', comment: '研究のため' },
-  { userID: 'T001', userName: '田中太郎', action: 'exit', timestamp: '2024-01-20T08:45:00Z', comment: '作業完了' },
-  { userID: 'Y003', userName: '山田次郎', action: 'exit', timestamp: '2024-01-20T08:30:00Z', comment: '外出' },
-];
+    {
+      "userID": "U002",
+      "userName": "佐藤さん",
+      "action": "enter",
+      "timestamp": "2025-08-10T05:30:00.000Z",
+      "comment": "研究のため"
+    },
+    {
+      "userID": "U005",
+      "userName": "高橋さん",
+      "action": "exit",
+      "timestamp": "2025-08-10T05:15:00.000Z",
+      "comment": "作業完了"
+    },
+    {
+      "userID": "U004",
+      "userName": "鈴木さん",
+      "action": "enter",
+      "timestamp": "2025-08-10T04:45:00.000Z",
+      "comment": "退出"
+    },
+    {
+      "userID": "U007",
+      "userName": "渡辺さん",
+      "action": "enter",
+      "timestamp": "2025-08-10T04:20:00.000Z",
+      "comment": "研究のため"
+    },
+    {
+      "userID": "U009",
+      "userName": "木村さん",
+      "action": "exit",
+      "timestamp": "2025-08-10T03:50:00.000Z",
+      "comment": "退出"
+    }
+  ];
 
 // データファイルの初期化
 async function initializeDataFiles() {
@@ -122,13 +205,13 @@ app.post('/api/users/:userID/enter', async (req, res) => {
     const { userName, comment } = req.body;
     
     const users = await readDataFile(USERS_FILE);
-    let user = users.find(u => u.userID === userID);
+    const user = users.find(u => u.userID === userID);
     
     if (!user) {
-      // 新規ユーザーを作成（userNameが渡されていない場合はデフォルト名を使用）
-      const defaultUserName = userName || `ユーザー${userID}`;
-      user = { userID, userName: defaultUserName, isInRoom: false, lastUpdate: null };
-      users.push(user);
+      return res.status(404).json({ 
+        success: false, 
+        error: 'ユーザーが見つかりません' 
+      });
     } else if (userName) {
       // 既存ユーザーの名前を更新
       user.userName = userName;
