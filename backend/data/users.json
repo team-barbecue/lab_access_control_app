@@ -27,30 +27,30 @@
     "userID": "U005",
     "userName": "高橋さん",
     "isInRoom": false,
-    "lastUpdate": "2025-08-10T04:30:06.039Z"
+    "lastUpdate": "2025-08-10T05:45:24.213Z"
   },
   {
     "userID": "U006",
     "userName": "伊藤さん",
     "isInRoom": false,
-    "lastUpdate": "2025-08-10T04:12:29.484Z"
+    "lastUpdate": "2025-08-10T05:29:24.782Z"
   },
   {
     "userID": "U007",
     "userName": "渡辺さん",
     "isInRoom": true,
-    "lastUpdate": "2025-08-10T04:12:29.484Z"
+    "lastUpdate": "2025-08-10T05:40:25.872Z"
   },
   {
     "userID": "U008",
     "userName": "加藤さん",
     "isInRoom": false,
-    "lastUpdate": "2025-08-10T04:12:29.484Z"
+    "lastUpdate": "2025-08-10T05:29:25.823Z"
   },
   {
     "userID": "U009",
     "userName": "木村さん",
     "isInRoom": false,
-    "lastUpdate": "2025-08-10T04:12:29.484Z"
+    "lastUpdate": "2025-08-10T05:29:18.021Z"
   }
 ]
