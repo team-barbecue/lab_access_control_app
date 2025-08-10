@@ -1,5 +1,12 @@
 [
   {
+    "userID": "U001",
+    "userName": "田中さん",
+    "action": "enter",
+    "timestamp": "2025-08-10T07:47:00.621Z",
+    "comment": "入室"
+  },
+  {
     "userID": "U002",
     "userName": "佐藤さん",
     "action": "enter",

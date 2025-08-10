@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { setCookie, getCookie, USER_ID_COOKIE } from "../utils/cookies";
 import "./AttendanceForm.css";
 
 export default function AttendanceForm({ API_URL, onAttendanceUpdate, pageType = "enter" }) {
@@ -10,6 +11,14 @@ export default function AttendanceForm({ API_URL, onAttendanceUpdate, pageType =
   const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
   const [isLoadingUsername, setIsLoadingUsername] = useState(false);
+
+  // ページ読み込み時にクッキーからユーザーIDを復元
+  useEffect(() => {
+    const savedUserID = getCookie(USER_ID_COOKIE);
+    if (savedUserID) {
+      setFormData(prev => ({ ...prev, userID: savedUserID }));
+    }
+  }, []);
 
   // ユーザーIDが変更されたときにユーザー名を取得
   useEffect(() => {
@@ -60,6 +69,9 @@ export default function AttendanceForm({ API_URL, onAttendanceUpdate, pageType =
       const result = await response.json();
 
       if (result.success) {
+        // 成功時にユーザーIDをクッキーに保存
+        setCookie(USER_ID_COOKIE, formData.userID, 30);
+        
         const actionText = pageType === "enter" ? "入室" : "退室";
         setMessage(`ユーザーID: ${formData.userID}の${actionText}が正常に記録されました`);
         setFormData({
@@ -88,6 +100,11 @@ export default function AttendanceForm({ API_URL, onAttendanceUpdate, pageType =
       ...prev,
       [name]: value
     }));
+    
+    // ユーザーIDが変更されたらクッキーに保存
+    if (name === 'userID') {
+      setCookie(USER_ID_COOKIE, value, 30);
+    }
   };
 
   return (

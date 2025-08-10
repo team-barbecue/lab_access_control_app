@@ -2,8 +2,8 @@
   {
     "userID": "U001",
     "userName": "田中さん",
-    "isInRoom": false,
-    "lastUpdate": "2025-08-10T07:05:33.719Z"
+    "isInRoom": true,
+    "lastUpdate": "2025-08-10T07:47:00.621Z"
   },
   {
     "userID": "U002",
