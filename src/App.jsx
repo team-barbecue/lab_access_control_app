@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import RoomLayout from "./components/RoomLayout";
 import AttendanceLog from "./components/AttendanceLog";
+import AttendancePage from "./components/AttendancePage";
 import Header from "./components/Header";
 import "./App.css";
 
@@ -8,8 +9,33 @@ export default function App() {
   const API_URL = 'http://localhost:3001';
   const [desks, setDesks] = useState([]);
   const [logs, setLogs] = useState([]);
+  const [currentPage, setCurrentPage] = useState('room'); // 'room' or 'enter' or 'exit'
 
   useEffect(() => {
+    // URLから初期ページを設定
+    const path = window.location.pathname;
+    if (path === '/enter') {
+      setCurrentPage('enter');
+    } else if (path === '/exit') {
+      setCurrentPage('exit');
+    } else {
+      setCurrentPage('room');
+    }
+
+    // ブラウザの戻るボタンに対応
+    const handlePopState = () => {
+      const currentPath = window.location.pathname;
+      if (currentPath === '/enter') {
+        setCurrentPage('enter');
+      } else if (currentPath === '/exit') {
+        setCurrentPage('exit');
+      } else {
+        setCurrentPage('room');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
     fetch(`${API_URL}/api/users`)
       .then((res) => res.json())
       .then((data) => {
@@ -35,6 +61,10 @@ export default function App() {
         }));
         setLogs(logData);
       });
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, []);
 
   const toggleAttendance = async (id) => {
@@ -78,17 +108,44 @@ export default function App() {
     alert("詳細ログページに移動します...");
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // URLを更新
+    if (page === 'room') {
+      window.history.pushState({}, '', '/');
+    } else {
+      window.history.pushState({}, '', `/${page}`);
+    }
+  };
+
   const currentCount = desks.filter((d) => d.occupied).length;
   const maxCount = desks.length;
+
+  // ページコンテンツをレンダリング
+  const renderPageContent = () => {
+    switch (currentPage) {
+      case 'enter':
+        return <AttendancePage API_URL={API_URL} pageType="enter" />;
+      case 'exit':
+        return <AttendancePage API_URL={API_URL} pageType="exit" />;
+      default:
+        return (
+          <>
+            <RoomLayout desks={desks} onToggle={toggleAttendance} />
+            <div className="controls">
+              <AttendanceLog logs={logs} onShowFullLog={showFullLog} />
+            </div>
+          </>
+        );
+    }
+  };
 
   return (
     <div className="app">
       <Header currentCount={currentCount} maxCount={maxCount} />
+      
       <div className="container">
-        <RoomLayout desks={desks} onToggle={toggleAttendance} />
-        <div className="controls">
-          <AttendanceLog logs={logs} onShowFullLog={showFullLog} />
-        </div>
+        {renderPageContent()}
       </div>
     </div>
   );
