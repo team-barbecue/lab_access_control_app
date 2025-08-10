@@ -59,3 +59,32 @@
     font-size: 0.8rem;
     opacity: 0.9;
 }
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+}
+
+.legend-available {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.legend-occupied {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
