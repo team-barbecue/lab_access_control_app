@@ -2,12 +2,19 @@ import { useState, useEffect } from "react";
 import RoomLayout from "./components/RoomLayout";
 import AttendanceLog from "./components/AttendanceLog";
 import Header from "./components/Header";
+import CommentModal from "./components/CommentModal"; // モーダルをインポート
 import "./App.css";
 
 export default function App() {
   const API_URL = 'http://localhost:3001';
   const [desks, setDesks] = useState([]);
   const [logs, setLogs] = useState([]);
+
+  // --- モーダル用のStateを追加 ---
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDesk, setSelectedDesk] = useState(null);
+  const [comment, setComment] = useState("");
+  // ---------------------------------
 
   useEffect(() => {
     fetch(`${API_URL}/api/users`)
@@ -25,57 +32,72 @@ export default function App() {
     fetch(`${API_URL}/api/logs`)
       .then((res) => res.json())
       .then((data) => {
-        const logData = data.map((log) => ({
-          text: `${log.userName}が${log.action === "enter" ? "出席" : "欠席に変更"}`,
-          type: log.action === "enter" ? "in" : "out",
-          time: new Date(log.timestamp).toLocaleTimeString("ja-JP", {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        }));
-        setLogs(logData);
+        setLogs(data);
       });
   }, []);
 
-  const toggleAttendance = async (id) => {
+  // 机クリック時の処理：モーダルを開く
+  const handleDeskClick = (id) => {
     const desk = desks.find((d) => d.id === id);
-    if (!desk) return;
+    if (desk) {
+      setSelectedDesk(desk);
+      setIsModalOpen(true);
+    }
+  };
 
-    const url = `${API_URL}/api/users/${desk.userID}/${desk.occupied ? "exit" : "enter"}`;
+  // モーダルを閉じる処理
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDesk(null);
+    setComment(""); // コメントをリセット
+  };
+
+  // フォーム送信時の処理：APIリクエスト
+  const handleSubmitAttendance = async () => {
+    if (!selectedDesk) return;
+
+    const url = `${API_URL}/api/users/${selectedDesk.userID}/${selectedDesk.occupied ? "exit" : "enter"}`;
+    
+    // APIに送信するデータ
+    const body = {
+      userName: selectedDesk.user,
+      comment: comment || null, // コメントが空ならnullを送信
+    };
+
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName: desk.user }),
+      body: JSON.stringify(body),
     });
     const result = await res.json();
 
     if (result.success) {
+      // 座席の状態を更新
       setDesks((prev) =>
         prev.map((d) =>
-          d.id === id ? { ...d, occupied: !d.occupied } : d
+          d.id === selectedDesk.id ? { ...d, occupied: !d.occupied } : d
         )
       );
 
-      const now = new Date(result.user.lastUpdate).toLocaleTimeString("ja-JP", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      setLogs((prev) => [
-        {
-          text: `${desk.user}が${desk.occupied ? "欠席に変更" : "出席"}`,
-          type: desk.occupied ? "out" : "in",
-          time: now,
-        },
-        ...prev.slice(0, 9),
-      ]);
+      // 新しいログオブジェクトを作成
+      const newLog = {
+        userID: selectedDesk.userID,
+        userName: selectedDesk.user,
+        action: selectedDesk.occupied ? "exit" : "enter",
+        timestamp: result.user.lastUpdate,
+        comment: comment || null,
+      };
+      
+      setLogs((prev) => [newLog, ...prev.slice(0, 19)]);
     } else {
-      alert(result.error || "エラーが発生しました");
+      // alert(result.error || "エラーが発生しました");
     }
+    
+    handleCloseModal(); // 処理完了後にモーダルを閉じる
   };
 
   const showFullLog = () => {
-    alert("詳細ログページに移動します...");
+    // alert("詳細ログページに移動します...");
   };
 
   const currentCount = desks.filter((d) => d.occupied).length;
@@ -85,11 +107,24 @@ export default function App() {
     <div className="app">
       <Header currentCount={currentCount} maxCount={maxCount} />
       <div className="container">
-        <RoomLayout desks={desks} onToggle={toggleAttendance} />
+        {/* toggleAttendanceをhandleDeskClickに変更 */}
+        <RoomLayout desks={desks} onToggle={handleDeskClick} />
         <div className="controls">
           <AttendanceLog logs={logs} onShowFullLog={showFullLog} />
         </div>
       </div>
+
+      {/* モーダルコンポーネントをレンダリング */}
+      {selectedDesk && (
+        <CommentModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitAttendance}
+          comment={comment}
+          setComment={setComment}
+          desk={selectedDesk}
+        />
+      )}
     </div>
   );
 }
