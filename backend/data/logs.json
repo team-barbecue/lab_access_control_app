@@ -1,26 +1,32 @@
 [
   {
-    "userID": "TEST001",
-    "userName": "テストユーザー",
+    "userID": "U002",
+    "userName": "佐藤さん",
     "action": "enter",
-    "timestamp": "2025-08-10T01:46:01.253Z"
+    "timestamp": "2025-08-10T05:30:00.000Z"
   },
   {
-    "userID": "S002",
-    "userName": "佐藤花子",
+    "userID": "U005",
+    "userName": "高橋さん",
+    "action": "exit",
+    "timestamp": "2025-08-10T05:15:00.000Z"
+  },
+  {
+    "userID": "U004",
+    "userName": "鈴木さん",
     "action": "enter",
-    "timestamp": "2024-01-20T09:30:00Z"
+    "timestamp": "2025-08-10T04:45:00.000Z"
   },
   {
-    "userID": "T001",
-    "userName": "田中太郎",
-    "action": "exit",
-    "timestamp": "2024-01-20T08:45:00Z"
+    "userID": "U007",
+    "userName": "渡辺さん",
+    "action": "enter",
+    "timestamp": "2025-08-10T04:20:00.000Z"
   },
   {
-    "userID": "Y003",
-    "userName": "山田次郎",
+    "userID": "U009",
+    "userName": "木村さん",
     "action": "exit",
-    "timestamp": "2024-01-20T08:30:00Z"
+    "timestamp": "2025-08-10T03:50:00.000Z"
   }
 ]
