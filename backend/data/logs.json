@@ -1,0 +1,26 @@
+[
+  {
+    "userID": "TEST001",
+    "userName": "テストユーザー",
+    "action": "enter",
+    "timestamp": "2025-08-10T01:46:01.253Z"
+  },
+  {
+    "userID": "S002",
+    "userName": "佐藤花子",
+    "action": "enter",
+    "timestamp": "2024-01-20T09:30:00Z"
+  },
+  {
+    "userID": "T001",
+    "userName": "田中太郎",
+    "action": "exit",
+    "timestamp": "2024-01-20T08:45:00Z"
+  },
+  {
+    "userID": "Y003",
+    "userName": "山田次郎",
+    "action": "exit",
+    "timestamp": "2024-01-20T08:30:00Z"
+  }
+]
