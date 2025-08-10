@@ -1,4 +1,4 @@
-// import "./RoomLayout.css";
+import "./RoomLayout.css";
 
 export default function RoomLayout({ desks, onToggle }) {
   return (

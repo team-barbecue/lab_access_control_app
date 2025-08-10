@@ -1,4 +1,4 @@
-// import "./AttendanceLog.css";
+import "./AttendanceLog.css";
 
 export default function AttendanceLog({ logs, onShowFullLog }) {
   return (
